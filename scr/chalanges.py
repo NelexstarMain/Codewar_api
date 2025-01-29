@@ -41,3 +41,5 @@ class KataInfo:
 
         else:
             print(f"Error Key: {response.status_code}")
+
+
