@@ -26,7 +26,11 @@ class KataInfo:
         self.kyu: str = ""
 
     def get(self) -> None:
-        response = requests.get(self.URL)
+        
+        if isinstance(self.ID, int):
+            response = requests.get(self.URL)
+        else:
+            raise TypeError('ID must be (int)')
 
         if response.status_code == 200:
             data = response.json()
