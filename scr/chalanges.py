@@ -2,11 +2,12 @@ import requests
 
 class UserKataInfo:
     def __init__(self, user: str) -> None:
-        self.USER: str = user
+        self.USER = user
         self.URL: str = f"https://www.codewars.com/api/v1/users/{self.USER}/code-challenges/completed?page=0"
         self.id_list: list = []
 
     def get(self) -> None:   
+        print(self.URL)
         response = requests.get(self.URL)
 
         if response.status_code == 200:
