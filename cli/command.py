@@ -2,7 +2,6 @@ import sys
 import ast
 from typing import get_type_hints, Any, Callable
 
-
 class CLI:
     def __init__(self):
         self.commands = {}
@@ -98,7 +97,7 @@ class CLI:
         """
         def help():
             """
-            Funkcja wyświetlająca pomoc dla dostępnych komend.
+            Help command.
             """
             self.show_help()
 
@@ -124,7 +123,6 @@ class CLI:
             if name in self.commands:
                 func = self.commands[name]
                 if len(get_type_hints(func)) > 0:
-                    # Parsowanie argumentów tylko wtedy, gdy są one przekazane w terminalu
                     args = sys.argv[sys.argv.index(name) + 1:]
                     func(*self.parse_arguments(func, args))
                 else:
@@ -142,17 +140,17 @@ class CLI:
             print(f"\n{'-' * 40}\nCommand: {command_name}\n{'-' * 40}")
             doc = command.__doc__ or "No description available."
             cleaned_doc = "\n".join(line.strip() for line in doc.split("\n") if line.strip())
-            print(f"\nDescription:\n    {cleaned_doc.replace('\n', '\n    ')}")
+            print(f"\nDescription:\n\n   {cleaned_doc.replace('\n', '\n    ')}")
 
             type_hints = get_type_hints(command)
             if type_hints:
-                print("\nArguments:")
+                print("\n    Arguments:")
                 for param, param_type in type_hints.items():
-                    print(f"    {param}: <{param_type.__name__}>")
+                    print(f"        {param}: <{param_type.__name__}>")
 
                 arg_list = [f"<{t.__name__}>" for t in type_hints.values()]
-                print(f"\nUsage:\n    {command_name} {' '.join(arg_list)}")
+                print(f"\n    Usage:\n        {command_name} {' '.join(arg_list)}")
             else:
-                print("\nThis command has no arguments.")
+                print("\n    This command has no arguments.")
 
         print(f"\n{'=' * 40}\n")

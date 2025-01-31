@@ -1,5 +1,3 @@
-from scr.save import Save
-from scr.chalanges import UserKataInfo, KataInfo
 from commands import cli
 
 

@@ -7,7 +7,6 @@ class UserKataInfo:
         self.id_list: list = []
 
     def get(self) -> None:   
-        print(self.URL)
         response = requests.get(self.URL)
 
         if response.status_code == 200:
