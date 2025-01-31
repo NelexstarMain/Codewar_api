@@ -1,5 +1,6 @@
-from scr.cwFetch import UserKataInfo
-from scr.jsonSave import Save
+from scr.katas.cwFetch import UserKataInfo
+from scr.katas.jsonSave import Save
+from scr.cw_version_control.menager import MainFolder
 from cli.command import CLI
 from config import ConfigManager
 
@@ -31,8 +32,13 @@ def getkatas():
     config.open()
     user = UserKataInfo(config.data['user_name'])
     user.get()
-    save = Save(user.id_list, "scr/katas.json")
+    save = Save(user.id_list, "scr/katas/katas.json")
     save.save()
     print(f"[{len(user.id_list)}] katas found")
 
-
+@cli.command(check_args=False)
+def setenv():
+    """Creates main folder for katas with folders for each lvl of difficulty"""
+    config.open()
+    m = MainFolder(config.data.get('main_directory'))
+    m.create()
