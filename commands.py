@@ -1,4 +1,4 @@
-from scr.katas.cwFetch import UserKataInfo
+from scr.katas.cwFetch import UserKataInfo, KataInfo
 from scr.katas.jsonSave import Save
 from scr.cw_version_control.menager import MainFolder
 from cli.command import CLI
@@ -42,3 +42,16 @@ def setenv():
     config.open()
     m = MainFolder(config.data.get('main_directory'))
     m.create()
+
+@cli.command(check_args=False)
+def update():
+    save = Save(path='scr/katas/katas.json')
+    katas = save.load()
+    katas_list = []
+    for kata in katas:
+        k = KataInfo(kata)
+        k.get()
+        katas_list.append(k.data)
+    config.open()
+    m = MainFolder(config.data.get('main_directory'))
+    m.add_katas(katas_list)

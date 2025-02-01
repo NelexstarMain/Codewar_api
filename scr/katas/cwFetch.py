@@ -21,24 +21,15 @@ class KataInfo:
     def __init__(self, id: int) -> None:
         self.ID = id
         self.URL = f"https://www.codewars.com/api/v1/code-challenges/{self.ID}"
-        self.title: str = ""
-        self.info: str = ""
-        self.kyu: str = ""
+        self.data = {}
 
     def get(self) -> None:
         
-        if isinstance(self.ID, int):
-            response = requests.get(self.URL)
-        else:
-            raise TypeError('ID must be (int)')
+        response = requests.get(self.URL)
 
         if response.status_code == 200:
-            data = response.json()
-
-            self.title = data.get('slug')
-            self.info = data.get('description')
-            self.kyu = data.get('rank').get('name')
-
+            self.data = response.json()
+            
         else:
             print(f"Error Key: {response.status_code}")
 
