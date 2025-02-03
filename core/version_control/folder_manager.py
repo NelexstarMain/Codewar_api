@@ -9,8 +9,8 @@ class MainFolder:
         self.folders = []
 
     def create(self) -> None:
-        if os.path.exists(self.path):
-            os.mkdir(os.path.join(self.path, self.MAIN_NAME))
+        if not os.path.exists(self.path):
+            os.mkdir(self.main_path)
             for i in range(1, 8):
                 os.mkdir(os.path.join(self.main_path, f"{i} kyu"))
 

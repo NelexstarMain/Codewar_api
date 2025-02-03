@@ -1,17 +1,17 @@
 import os
 
-from scr.katas.cwFetch import UserKataInfo, KataInfo
-from scr.katas.jsonSave import Save
-from scr.cw_version_control.menager import MainFolder
-from scr.git import git_commands
-from cli.command import CLI
-from config import ConfigManager
+from core.kata_data.kata_fetcher import UserKataInfo, KataInfo
+from core.kata_data.json_storage import Save
+from core.version_control.folder_manager import MainFolder
+from core.git_tools.git_manager import GIT
+from command_interface.command import CLI
+from config_manager import ConfigManager
 
 cli = CLI()
 config = ConfigManager('settings.yaml')
 data = config.open()
 
-git_manager = git_commands.GIT(os.path.join(data.get('main_directory'), data.get('main_folder')))
+git_manager = GIT(os.path.join(data.get('main_directory'), data.get('main_folder')))
 
 @cli.command(check_args=True)
 def set_user(name: str):
@@ -39,7 +39,7 @@ def fetch_katas():
     user = UserKataInfo(user_name)
     
     user.get()
-    save = Save(user.id_list, "scr/katas/katas.json")
+    save = Save(user.id_list, "core/kata_data/kata_data.json")
     save.save()
     print(f"[{len(user.id_list)}] katas found")
 
