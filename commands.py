@@ -11,31 +11,29 @@ cli = CLI()
 config = ConfigManager('settings.yaml')
 data = config.open()
 
-giti = git_commands.GIT(os.path.join(data.get('main_directory'), data.get('main_folder')))
+git_manager = git_commands.GIT(os.path.join(data.get('main_directory'), data.get('main_folder')))
 
 @cli.command(check_args=True)
-def changeuser(name: str):
+def set_user(name: str):
     """
-    Sets the username for the current user in the system.
-    """    
-    
+    Sets the username for the system.
+    """
     config.open()
     config.data["user_name"] = name
     config.save()
 
 @cli.command(check_args=True)
-def changedir(path: str):
+def set_dir(path: str):
     """
-    Sets the main folder path in the system.
+    Sets the main working directory.
     """
-    
     config.open()
     config.data["main_directory"] = path
     config.save()
 
 @cli.command(check_args=False)
-def getkatas():
-    """Saves all User katas id"""
+def fetch_katas():
+    """Fetches and saves all user kata IDs."""
     config.open()
     user_name = config.data.get('user_name')    
     user = UserKataInfo(user_name)
@@ -46,36 +44,37 @@ def getkatas():
     print(f"[{len(user.id_list)}] katas found")
 
 @cli.command(check_args=False)
-def setenv():
-    """Creates main folder for katas with folders for each lvl of difficulty"""
-
+def setup_env():
+    """Creates the main folder structure for katas."""
     main_directory = data.get('main_directory')
-    m = MainFolder(main_directory, data.get('main_folder'))
-    m.create()
+    manager = MainFolder(main_directory, data.get('main_folder'))
+    manager.create()
 
 @cli.command(check_args=False)
-def update():
+def update_katas():
+    """Updates kata details and organizes them in the main folder."""
     save = Save(path='scr/katas/katas.json')
     katas = save.load()
 
     katas_list = []
     for kata in katas:
-        k = KataInfo(kata)
-        k.get()
-        katas_list.append(k.data)
+        kata_info = KataInfo(kata)
+        kata_info.get()
+        katas_list.append(kata_info.data)
     
     main_directory = data.get('main_directory')
-    m = MainFolder(main_directory, data.get('main_folder'))
-    m.add_katas(katas_list)
+    manager = MainFolder(main_directory, data.get('main_folder'))
+    manager.add_katas(katas_list)
 
 @cli.command(check_args=False)
-def git():
-    """Creates repositorium and commits changes"""
-    giti.init_repo()
-    giti.add()
-    giti.commit(data.get('commit_msg_base'))
-    giti.pull()
-    giti.push()
-
-
-    
+def git_sync():
+    """Initializes, commits, pulls, and pushes changes to the repository."""
+    git_manager.init_repo()
+    git_manager.add()
+    commit_message = data.get('commit_msg_base')
+    git_manager.commit(commit_message)
+    git_manager.pull()
+    git_manager.push()
+    branch = data.get('main_branch')
+    print(git_manager.status())
+    print(git_manager.log())
