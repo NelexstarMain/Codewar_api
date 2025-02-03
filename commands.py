@@ -1,11 +1,17 @@
+import os
+
 from scr.katas.cwFetch import UserKataInfo, KataInfo
 from scr.katas.jsonSave import Save
 from scr.cw_version_control.menager import MainFolder
+from scr.git import git_commands
 from cli.command import CLI
 from config import ConfigManager
 
 cli = CLI()
 config = ConfigManager('settings.yaml')
+data = config.open()
+
+giti = git_commands.GIT(os.path.join(data.get('main_directory'), data.get('main_folder')))
 
 @cli.command(check_args=True)
 def changeuser(name: str):
@@ -42,9 +48,9 @@ def getkatas():
 @cli.command(check_args=False)
 def setenv():
     """Creates main folder for katas with folders for each lvl of difficulty"""
-    config.open()
-    main_directory = config.data.get('main_directory')
-    m = MainFolder(main_directory)
+
+    main_directory = data.get('main_directory')
+    m = MainFolder(main_directory, data.get('main_folder'))
     m.create()
 
 @cli.command(check_args=False)
@@ -58,7 +64,18 @@ def update():
         k.get()
         katas_list.append(k.data)
     
-    config.open()
-    main_directory = config.data.get('main_directory')
-    m = MainFolder(main_directory)
+    main_directory = data.get('main_directory')
+    m = MainFolder(main_directory, data.get('main_folder'))
     m.add_katas(katas_list)
+
+@cli.command(check_args=False)
+def git():
+    """Creates repositorium and commits changes"""
+    giti.init_repo()
+    giti.add()
+    giti.commit(data.get('commit_msg_base'))
+    giti.pull()
+    giti.push()
+
+
+    
