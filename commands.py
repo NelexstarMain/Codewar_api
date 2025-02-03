@@ -12,16 +12,17 @@ def changeuser(name: str):
     """
     Sets the username for the current user in the system.
     """    
+    
     config.open()
     config.data["user_name"] = name
     config.save()
-
 
 @cli.command(check_args=True)
 def changedir(path: str):
     """
     Sets the main folder path in the system.
     """
+    
     config.open()
     config.data["main_directory"] = path
     config.save()
@@ -30,7 +31,9 @@ def changedir(path: str):
 def getkatas():
     """Saves all User katas id"""
     config.open()
-    user = UserKataInfo(config.data['user_name'])
+    user_name = config.data.get('user_name')    
+    user = UserKataInfo(user_name)
+    
     user.get()
     save = Save(user.id_list, "scr/katas/katas.json")
     save.save()
@@ -40,18 +43,22 @@ def getkatas():
 def setenv():
     """Creates main folder for katas with folders for each lvl of difficulty"""
     config.open()
-    m = MainFolder(config.data.get('main_directory'))
+    main_directory = config.data.get('main_directory')
+    m = MainFolder(main_directory)
     m.create()
 
 @cli.command(check_args=False)
 def update():
     save = Save(path='scr/katas/katas.json')
     katas = save.load()
+
     katas_list = []
     for kata in katas:
         k = KataInfo(kata)
         k.get()
         katas_list.append(k.data)
+    
     config.open()
-    m = MainFolder(config.data.get('main_directory'))
+    main_directory = config.data.get('main_directory')
+    m = MainFolder(main_directory)
     m.add_katas(katas_list)
