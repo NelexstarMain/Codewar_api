@@ -1,5 +1,5 @@
-main_directory: C:\Users\Nelek\Desktop
-user_name: NelexstarMain
-commit_msg_base: CODEWARS KATAS
-main_folder: CODEWARS
-main_branch: main
+commit_prefix: 'Codewars: Kata Solution'
+default_branch: main
+root_directory: null
+username: NelexstarMain
+workspace_folder: codewars_katas

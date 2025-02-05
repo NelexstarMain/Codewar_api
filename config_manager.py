@@ -6,7 +6,7 @@ class ConfigManager:
         self.path: str = path
         self.data: Dict = {}
 
-    def open(self) -> None:
+    def open(self) -> dict:
         """Loads the configuration data from the specified file."""
         try:
             with open(self.path, "r", encoding="utf-8") as file:
