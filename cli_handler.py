@@ -44,7 +44,7 @@ def fetch_katas():
         save.save()
         print(f"[{len(user.id_list)}] katas found")
     else:
-        CustomError('UnassignedError', 'Variable <user> has no assigned value.')
+        CustomError('UnassignedError', 'Variable <user> has no assigned value. Use <set_user> command.')
 
 @cli.command(check_args=False)
 def setup_env():
@@ -55,7 +55,7 @@ def setup_env():
         manager = MainFolder(main_directory, main_folder)
         manager.create()
     else:
-        CustomError('UnassignedError', 'Variable <directory> has no assigned value.')
+        CustomError('UnassignedError', 'Variable <directory> has no assigned value. Use <set_dir> command.')
 
 @cli.command(check_args=False)
 def update_katas():
@@ -74,7 +74,7 @@ def update_katas():
         manager = MainFolder(main_directory, data.get('workspace_folder'))
         manager.add_katas(katas_list)
     else:
-        CustomError('UnassignedError', 'Variable <directory> has no assigned value.')
+        CustomError('UnassignedError', 'Variable <directory> has no assigned value. Use <set_dir> command.')
 
 @cli.command(check_args=False)
 def git_sync():
@@ -89,10 +89,10 @@ def git_sync():
         commit_message = data.get('commit_prefix')
         git_manager.commit(commit_message)
         branch = data.get('default_branch')
-        git_manager.pull()
-        git_manager.push()  
-        print(git_manager.status())
-        print(git_manager.log())
+        git_manager.pull(branch)
+        git_manager.push(branch)  
+        print(git_manager.status(branch))
+        print(git_manager.log(branch))
 
     else:
-        CustomError('UnassignedError', 'Variable <directory> has no assigned value.')
+        CustomError('UnassignedError', 'Variable <directory> has no assigned value. Use <set_dir> command.')

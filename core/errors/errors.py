@@ -1,4 +1,6 @@
 class CustomError:
+    """Custom Error class"""
+
     ALLOWED_TYPES = ["TypeError", "ValueError", "UnassignedError"]
 
     def __init__(self, error_type: str, message: str) -> None:
@@ -12,3 +14,5 @@ class CustomError:
 
     def __str__(self) -> str:
         return f"{self.error_type}: {self.message}"
+
+
