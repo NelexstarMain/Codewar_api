@@ -60,9 +60,8 @@ def setup_env():
 @cli.command(check_args=False)
 def update_katas():
     """Updates kata details and organizes them in the main folder."""
-    save = Save(path='scr/katas/katas.json')
+    save = Save(path='core/kata_data/kata_data.json')
     katas = save.load()
-    print(katas)
     if katas:
             katas_list = []
             for kata in katas:
