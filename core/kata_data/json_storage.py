@@ -14,5 +14,5 @@ class Save:
             with open(self.path, "r", encoding="utf-8") as file:
                 self.katas = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
-            self.katas = []
+            return None
         return self.katas

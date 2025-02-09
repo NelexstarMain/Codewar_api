@@ -62,19 +62,22 @@ def update_katas():
     """Updates kata details and organizes them in the main folder."""
     save = Save(path='scr/katas/katas.json')
     katas = save.load()
-
-    katas_list = []
-    for kata in katas:
-        kata_info = KataInfo(kata)
-        kata_info.get()
-        katas_list.append(kata_info.data)
-    
-    main_directory = data.get('root_directory')
-    if main_directory is not None:
-        manager = MainFolder(main_directory, data.get('workspace_folder'))
-        manager.add_katas(katas_list)
+    print(katas)
+    if katas:
+            katas_list = []
+            for kata in katas:
+                kata_info = KataInfo(kata)
+                kata_info.get()
+                katas_list.append(kata_info.data)
+            
+            main_directory = data.get('root_directory')
+            if main_directory is not None:
+                manager = MainFolder(main_directory, data.get('workspace_folder'))
+                manager.add_katas(katas_list)
+            else:
+                CustomError('UnassignedError', 'Variable <directory> has no assigned value. Use <set_dir> command.')
     else:
-        CustomError('UnassignedError', 'Variable <directory> has no assigned value. Use <set_dir> command.')
+        CustomError('UnassignedError', 'JSON file is empty. Use <fetch_katas> command.')
 
 @cli.command(check_args=False)
 def git_sync():
